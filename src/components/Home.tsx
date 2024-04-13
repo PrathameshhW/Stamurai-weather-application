@@ -9,9 +9,12 @@ import { Combobox, Transition } from "@headlessui/react";
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
 import { SquareMenu, X } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import ScrollToTop from "react-scroll-to-top";
 import MaxWidthWraper from "./MaxWidthWraper";
+import Loader from "./ui/loader";
 import {
   Table,
   TableBody,
@@ -22,6 +25,7 @@ import {
 } from "./ui/table";
 
 const HomePage = () => {
+  // const router = useRouter();
   const [countryData, setCountryData] = useState<any>([]);
   const [offSet, setOffSet] = useState(1);
   const [sortColumn, setSortColumn] = useState("");
@@ -136,13 +140,13 @@ const HomePage = () => {
   return (
     <>
       <div className="w-full">
-        <div className="w-full h-80 bg-[#00224D]">
+        <div className="min-w-full sm:w-full h-80 bg-[#0C0C0C]">
           <MaxWidthWraper className="">
             <Combobox value={selected} onChange={setSelected}>
               <div className="relative pt-12 pb-4">
                 <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
                   <Combobox.Input
-                    className="w-full border-none py-3 pl-3 pr-10 h-12 text-base leading-5 text-gray-900 focus:ring-0"
+                    className="w-full border-none py-3 pl-3 pr-10 h-12 text-base text-gray-900 focus:outline-none"
                     displayValue={(selected) => selected?.ascii_name}
                     onChange={(event) => setQuery(event.target.value)}
                     placeholder="Search in table for Country, City or Timezone"
@@ -173,7 +177,7 @@ const HomePage = () => {
                           className={({ active }) =>
                             `relative cursor-default select-none py-2 px-4 ${
                               active
-                                ? "bg-[#5D0E41] text-white"
+                                ? "bg-[#481E14] text-white"
                                 : "text-gray-900"
                             }`
                           }
@@ -207,7 +211,7 @@ const HomePage = () => {
         <MaxWidthWraper className="">
           <div className="flex flex-col items-end">
             <button
-              className={`border mt-4 flex gap-x-1 items-center  flex-row border-solid ${
+              className={`border-2 mt-4 flex gap-x-1 items-center  flex-row border-solid font-semibold ${
                 valueSelected
                   ? "border-[#FF204E] text-[#FF204E] cursor-pointer font-medium"
                   : "border-slate-400 text-slate-400 cursor-not-allowed"
@@ -220,11 +224,11 @@ const HomePage = () => {
                 }
               }}
             >
-              <X className="w-4 " />
+              <X className={`w-4 `} />
               Clear Filter
             </button>
-            <div className="w-full my-4">
-              <Table className="border border-solid">
+            <div className="w-full my-4 overflow-x-auto">
+              <Table className="border border-solid border-black">
                 <TableHeader className="">
                   <TableRow className="border border-solid">
                     <TableHead className="">
@@ -315,11 +319,15 @@ const HomePage = () => {
                         key={index}
                         className="border border-solid border-gray-400"
                       >
-                        <TableCell className="font-medium">
-                          {item.ascii_name}
+                        <TableCell className="font-medium text-blue-600 underline">
+                          <Link
+                            href={`/weather?city=${item.ascii_name}&lon=${item.coordinates.lon}&lat=${item.coordinates.lat}`}
+                          >
+                            {item.ascii_name}
+                          </Link>
                         </TableCell>
                         <TableCell className="">{item.country_code}</TableCell>
-                        <TableCell>{item.cou_name_en}</TableCell>
+                        <TableCell className="">{item.cou_name_en}</TableCell>
                         <TableCell>{item.timezone}</TableCell>
                         <TableCell className="">
                           lon: <span>{item.coordinates.lon}</span> <br /> lat:{" "}
@@ -330,12 +338,17 @@ const HomePage = () => {
                   ) : (
                     <TableRow className="border border-solid border-gray-400">
                       <TableCell className="font-medium">
-                        {selected.ascii_name}
+                        <Link
+                          href={`/weather?city=${selected.ascii_name}&lon=${selected.coordinates.lon}&lat=${selected.coordinates.lat}`}
+                          className="text-blue-600 underline"
+                        >
+                          {selected.ascii_name}
+                        </Link>
                       </TableCell>
                       <TableCell className="">
                         {selected.country_code}
                       </TableCell>
-                      <TableCell>{selected.cou_name_en}</TableCell>
+                      <TableCell className="">{selected.cou_name_en}</TableCell>
                       <TableCell>{selected.timezone}</TableCell>
                       <TableCell className="">
                         lon: <span>{selected.coordinates.lon}</span> <br /> lat:{" "}
@@ -347,8 +360,16 @@ const HomePage = () => {
               </Table>
             </div>
           </div>
-          {loading && <span>loading...</span>}
-          <ScrollToTop smooth className="flex items-center justify-center " />
+          {loading && (
+            <div className="flex items-center justify-center p-4">
+              <Loader />
+            </div>
+          )}
+          <ScrollToTop
+            smooth
+            className="flex items-center justify-center"
+            style={{ backgroundColor: "", color: "#ffffff" }}
+          />
         </MaxWidthWraper>
       </div>
     </>
