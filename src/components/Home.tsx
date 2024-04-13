@@ -321,7 +321,7 @@ const HomePage = () => {
                       >
                         <TableCell className="font-medium text-blue-600 underline">
                           <Link
-                            href={`/weather?city=${item.ascii_name}&lon=${item.coordinates.lon}&lat=${item.coordinates.lat}`}
+                            href={`/weather?lon=${item.coordinates.lon}&lat=${item.coordinates.lat}&city=${item.ascii_name}`}
                           >
                             {item.ascii_name}
                           </Link>
@@ -339,7 +339,7 @@ const HomePage = () => {
                     <TableRow className="border border-solid border-gray-400">
                       <TableCell className="font-medium">
                         <Link
-                          href={`/weather?city=${selected.ascii_name}&lon=${selected.coordinates.lon}&lat=${selected.coordinates.lat}`}
+                          href={`/weather?lon=${selected.coordinates.lon}&lat=${selected.coordinates.lat}&city=${item.ascii_name}`}
                           className="text-blue-600 underline"
                         >
                           {selected.ascii_name}

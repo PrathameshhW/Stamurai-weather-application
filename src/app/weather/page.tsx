@@ -24,6 +24,7 @@ const Page = () => {
       const response = await fetch(WEATHER_API);
       const data = await response.json();
       setWeather(data);
+      console.log(data);
       setVideoBacground(data.weather[0].main);
     } catch (error) {
       console.log(error);
