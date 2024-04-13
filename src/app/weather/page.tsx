@@ -3,7 +3,7 @@
 import Loader from "@/components/ui/loader";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { WeatherBackgrounds } from "./weatherData";
 
 const Page = () => {
@@ -13,6 +13,7 @@ const Page = () => {
   const [date] = useState(new Date().toISOString().split("T")[0]);
 
   const searchParams = useSearchParams();
+  const hasCity = searchParams.has("city");
   const city = searchParams.get("city");
   const lon = searchParams.get("lon");
   const lat = searchParams.get("lat");
@@ -24,7 +25,6 @@ const Page = () => {
       const response = await fetch(WEATHER_API);
       const data = await response.json();
       setWeather(data);
-      console.log(data);
       setVideoBacground(data.weather[0].main);
     } catch (error) {
       console.log(error);
@@ -68,7 +68,7 @@ const Page = () => {
         autoPlay
         loop
         muted
-        className="absolute w-auto min-w-full h-screen object-cover"
+        className="absolute z-[-1] w-auto min-w-full h-screen object-cover"
       >
         <source src={bgUrl} type="video/mp4" />
         Your browser does not support the video tag.
@@ -80,7 +80,7 @@ const Page = () => {
               <div className="flex flex-col sm:flex-row mb-4 sm:justify-between sm:items-center">
                 <div className="">
                   <h5 className="mb-0 font-medium text-xl">
-                    {city}, {weather.sys.country}
+                    {hasCity ? city : weather.name}, {weather.sys.country}
                   </h5>
                   <h6 className="mb-0">{date}</h6>
                   <span className="flex flex-row items-center gap-x-3 my-3 text-sm">

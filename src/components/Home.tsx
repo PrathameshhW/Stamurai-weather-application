@@ -34,7 +34,7 @@ const HomePage = () => {
   const [selected, setSelected] = useState<any>();
   const [valueSelected, setValueSelected] = useState(false);
   const [query, setQuery] = useState("");
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<{ [key: string]: string }>({
     name: "",
     country_code: "",
     cou_name_en: "",
@@ -120,7 +120,9 @@ const HomePage = () => {
 
   const filteredData = sortedAndFilteredData.filter((item: any) => {
     return Object.keys(filters).every((key: string) =>
-      item[key].toLowerCase().includes(filters[key].toLowerCase())
+      (item as { [key: string]: string })[key]
+        .toLowerCase()
+        .includes(filters[key].toLowerCase())
     );
   });
 
@@ -147,7 +149,7 @@ const HomePage = () => {
                 <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
                   <Combobox.Input
                     className="w-full border-none py-3 pl-3 pr-10 h-12 text-base text-gray-900 focus:outline-none"
-                    displayValue={(selected) => selected?.ascii_name}
+                    displayValue={(selected: any) => selected?.ascii_name}
                     onChange={(event) => setQuery(event.target.value)}
                     placeholder="Search in table for Country, City or Timezone"
                   />
@@ -339,7 +341,7 @@ const HomePage = () => {
                     <TableRow className="border border-solid border-gray-400">
                       <TableCell className="font-medium">
                         <Link
-                          href={`/weather?lon=${selected.coordinates.lon}&lat=${selected.coordinates.lat}&city=${item.ascii_name}`}
+                          href={`/weather?lon=${selected.coordinates.lon}&lat=${selected.coordinates.lat}&city=${selected.ascii_name}`}
                           className="text-blue-600 underline"
                         >
                           {selected.ascii_name}
