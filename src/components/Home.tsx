@@ -142,7 +142,7 @@ const HomePage = () => {
   return (
     <>
       <div className="w-full">
-        <div className="min-w-full sm:w-full h-80 bg-[#0C0C0C]">
+        <div className="min-w-full sm:w-full h-80 bg-gray-900">
           <MaxWidthWraper className="">
             <Combobox value={selected} onChange={setSelected}>
               <div className="relative pt-12 pb-4">
@@ -179,7 +179,7 @@ const HomePage = () => {
                           className={({ active }) =>
                             `relative cursor-default select-none py-2 px-4 ${
                               active
-                                ? "bg-[#481E14] text-white"
+                                ? "bg-primary-700 text-white"
                                 : "text-gray-900"
                             }`
                           }
