@@ -12,6 +12,8 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [date] = useState(new Date().toISOString().split("T")[0]);
 
+  const WeatherElement = () => {};
+
   const searchParams = useSearchParams();
   const hasCity = searchParams.has("city");
   const city = searchParams.get("city");
